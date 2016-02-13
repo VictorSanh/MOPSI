@@ -81,7 +81,7 @@ void construitArbre(IntTree * tree, int generation); //Construit un arbre jusqu'
 double modelisation_mort_age(int age_old); //Pour la suite, cette fonction ne servira pas.
 int cardinal(IntTree* tree, int generation); //Cardinal de l'arbre jusqu'à génération incluse.
 
-//Relatif aux estimateurs
+//Relatif aux estimateurs, voir papier pour plus de précisions.
 double somme_taux_croissance(IntTree* tree, int i, int r);
 double somme_taux_croissance_next(IntTree* tree, int i, int r);
 double somme_taux_croissance_croise(IntTree* tree, int i, int r);
