@@ -10,5 +10,5 @@
 
 void InitRandom();
 double Random(double a, double b);
-double gaussienne(double mu,double sigma); //Génération d'une gaussienne
+double gaussienne(double mu,double sigma); //Génération d'une gaussienne de paramètres mu et sigma
 void verifie_gaussienne(); //Fonction de vérification d'une gaussienne
