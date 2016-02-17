@@ -2,7 +2,6 @@
 #include <iostream>
 #include <sstream>
 #include <cassert>
-#include "Imagine\Common.h"
 
 IntTree :: IntTree(int age_new0, int age_old0, double taux_croissance0, int generation0, double bruit0){
 	age_new = age_new0 ;
@@ -35,6 +34,10 @@ void IntTree :: setData(int age_new0,int age_old0){
 
 bool IntTree::isAlive(){
 	return alive;
+}
+
+int IntTree::getGeneration(){
+	return generation;
 }
 
 int IntTree :: nbSons(){
@@ -120,18 +123,18 @@ void  graphicDisplay(IntTree* tree, int generation, int position){
 	}
 }
 
-
-void construitArbre(IntTree* tree, int generation){
-   if(generation >=8){
+//Construit un arbre qui aura pour profondeur "générationMax", la racine étant la génération 0.
+void construitArbre(IntTree* tree, int generationMax){
+   if((*tree).generation >=generationMax){
        }
     else{
 		if (tree->isAlive()){
 			double bruit0 = gaussienne(0, 1);
 			tree->addAsLastSon(new IntTree(0, (*tree).age_new + 1, alpha0*(*tree).taux_croissance + beta0+bruit0, (*tree).generation + 1,bruit0));
-			construitArbre((*tree).sons[0], generation + 1);
+			construitArbre((*tree).sons[0], generationMax);
 			double bruit1 = gaussienne(0, 1);
 			tree->addAsLastSon(new IntTree(0, (*tree).age_old + 1, alpha1*(*tree).taux_croissance + beta1+bruit1, (*tree).generation + 1,bruit1));
-			construitArbre((*tree).sons[1], generation + 1);
+			construitArbre((*tree).sons[1], generationMax);
 		}
    }
 }
@@ -147,48 +150,65 @@ double modelisation_mort_age(int age_old){
 	return x;
 }
 
-int cardinal(IntTree *tree, int generation){
+int cardinal(IntTree* tree, int generation){
 	// retourner le cardinal de l'arbre jusqu'à la génération "generation"
 	if ((*tree).generation > generation){ return 0; }
 	else{
 		int fils = tree->nbSons();
 		int card = 0;
 		for (int i = 0; i<fils; i++){
-			card += cardinal((*tree).sons[i], generation);
+			card += cardinal(tree->getSon(i), generation);
 		}
-		return card;
+		return 1 + card;
 	}
 }
 
 
 //Les estimateurs de alpha.
-double somme_taux_croissance(IntTree* tree, int i, int r){
-	double x = 0;
-	if ((*tree).generation <= r){
+void somme_taux_croissance(IntTree* tree, int r, double& result){
+	if (tree->getGeneration() <= r){
+		result += (*tree).taux_croissance;
+		for (int k = 0; k < tree->nbSons(); k++){ 
+			somme_taux_croissance(tree->getSon(k), r, result); 
+		}
+	}
+}
+void somme_taux_croissance_carree(IntTree* tree, int r, double& result){
+	if (tree->getGeneration() <= r){
+		result += (*tree).taux_croissance*(*tree).taux_croissance;
 		for (int k = 0; k < tree->nbSons(); k++){
-			x += somme_taux_croissance((*tree).sons[k], i,r);
+			somme_taux_croissance(tree->getSon(k), r, result);
 		}
 	}
-	return ((*tree).taux_croissance + x);
 }
-double somme_taux_croissance_next(IntTree* tree, int i, int r){
-	double x = 0;
-	if ((*tree).generation <= r){
-		if (tree->nbSons()>0){
-			x += somme_taux_croissance_next((*tree).sons[i], i,r);
-		}
+void somme_taux_croissance_next(IntTree* tree, int eps, int r, double& result){
+	assert(tree->nbSons() >= eps);
+	if (tree->getGeneration() <= r){
+		result += (*tree->getSon(eps)).taux_croissance;
+		somme_taux_croissance_next(tree->getSon(0), eps, r, result);
+		somme_taux_croissance_next(tree->getSon(1), eps, r, result);
 	}
-	return ((*tree).taux_croissance + x);
 }
-double somme_taux_croissance_croise(IntTree* tree, int i, int r){
-	double x = 0;
-	if ((*tree).generation <= r){
-		if (tree->nbSons() > 0){
-			x += (*tree).taux_croissance*((*(*tree).sons[i]).taux_croissance);
-		}
+void somme_taux_croissance_croise(IntTree* tree, int eps, int r, double& result){
+	assert(tree->nbSons() >= eps);
+	if (tree->getGeneration() <= r){
+		result += (*tree->getSon(eps)).taux_croissance*(*tree).taux_croissance;
+		somme_taux_croissance_croise(tree->getSon(0), eps, r, result);
+		somme_taux_croissance_croise(tree->getSon(1), eps, r, result);
 	}
-	return  x;
 }
-double estimateur_alpha(IntTree* tree, int i){
-	return 0;
+double estimateur_alpha_eps_r(IntTree* tree, int eps, int r){
+	int card = 0;
+	card = cardinal(tree,r);
+	double somme = 0;
+	double somme_croisee = 0;
+	double somme_next = 0;
+	double somme_carree = 0;
+	somme_taux_croissance(tree, r, somme);
+	somme_taux_croissance_croise(tree, eps, r, somme_croisee);
+	somme_taux_croissance_next(tree, eps, r, somme_next);
+	somme_taux_croissance_carree(tree, r, somme_carree);
+	
+	double gros = (somme_carree / card - (somme*somme_next) / (card*card)) / (somme_carree / card - (somme / card)*(somme / card));
+	return gros;
 }

@@ -43,7 +43,7 @@ public:
         // Create a node with given information
         IntTree(int age_new0,int age_old0, double taux_croissance0, int generation0, double bruit0);
 
-        // Return information of this node
+        // Return age_new, age_old of this node
         pair<int,int> getData();
 
         //Destructeur
@@ -54,6 +54,9 @@ public:
 
 		//Return aliveness of cellule
 		bool isAlive();
+
+		//Return the generation of cellule
+		int getGeneration();
 
         // Return the number of sons of this node
         int nbSons();
@@ -77,11 +80,12 @@ public:
 };
 
 void graphicDisplay(IntTree* tree,int generation, int position); //Affichage graphique de l'arbre jusqu'à génération.
-void construitArbre(IntTree * tree, int generation); //Construit un arbre jusqu'à génération
+void construitArbre(IntTree * tree, int generationMax); //Construit un arbre de profondeur "generationMax", la racine étant la génération 0.
 double modelisation_mort_age(int age_old); //Pour la suite, cette fonction ne servira pas.
 int cardinal(IntTree* tree, int generation); //Cardinal de l'arbre jusqu'à génération incluse.
 
 //Relatif aux estimateurs, voir papier pour plus de précisions.
-double somme_taux_croissance(IntTree* tree, int i, int r);
-double somme_taux_croissance_next(IntTree* tree, int i, int r);
-double somme_taux_croissance_croise(IntTree* tree, int i, int r);
+void somme_taux_croissance(IntTree* tree, int r, double& result);
+void somme_taux_croissance_carree(IntTree* tree, int r, double& result);
+void somme_taux_croissance_next(IntTree* tree, int eps, int r, double& result);
+void somme_taux_croissance_croise(IntTree* tree, int eps, int r, double& result);
