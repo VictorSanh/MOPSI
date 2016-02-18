@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <string>
 #include <Imagine/Graphics.h>
@@ -16,18 +18,6 @@ const int H = pow(2,nb_generations)*10;
 const int rayon = 5;
 const int espace = 60;
 const double proba_mort = 0;
-
-//Constantes pour les taux de croissance
-const double alpha0 = 0.8;
-const double alpha1 = 0.7;
-const double beta0 = 0.6;
-const double beta1 = 0.5;
-
-const double p10 = 0.8; // proba de se diviser en deux fils qui ne meurent pas
-const double p1 = 0.05;//proba de se diviser en deux fils dont le nouveau meurt
-const double p0 = 0.1; // proba de se diviser en deux fils dont le vieux meurt
-
-const double proba_deces = 1 - (p10 + p1 + p0);
 
 class IntTree{
 public:
@@ -83,9 +73,3 @@ void graphicDisplay(IntTree* tree,int generation, int position); //Affichage gra
 void construitArbre(IntTree * tree, int generationMax); //Construit un arbre de profondeur "generationMax", la racine étant la génération 0.
 double modelisation_mort_age(int age_old); //Pour la suite, cette fonction ne servira pas.
 int cardinal(IntTree* tree, int generation); //Cardinal de l'arbre jusqu'à génération incluse.
-
-//Relatif aux estimateurs, voir papier pour plus de précisions.
-void somme_taux_croissance(IntTree* tree, int r, double& result);
-void somme_taux_croissance_carree(IntTree* tree, int r, double& result);
-void somme_taux_croissance_next(IntTree* tree, int eps, int r, double& result);
-void somme_taux_croissance_croise(IntTree* tree, int eps, int r, double& result);

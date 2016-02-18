@@ -11,6 +11,8 @@ add_executable(cellules main.cpp
                       cellules.cpp
                       cellules.h
 					  outils.cpp
-					  outils.h)
+					  outils.h
+					  estimateurs.cpp
+					  estimateurs.h)
 
 ImagineUseModules(cellules Graphics)
