@@ -43,19 +43,21 @@ void somme_taux_croissance_carree(IntTree* tree, int r, double& result){
 	}
 }
 void somme_taux_croissance_next(IntTree* tree, int eps, int r, double& result){
-	assert(tree->nbSons() >= eps);
 	if (tree->getGeneration() <= r){
+		assert(tree->nbSons() >= eps);
 		result += (*tree->getSon(eps)).taux_croissance;
-		somme_taux_croissance_next(tree->getSon(0), eps, r, result);
-		somme_taux_croissance_next(tree->getSon(1), eps, r, result);
+		for (int k = 0; k < tree->nbSons(); k++){
+			somme_taux_croissance_next(tree->getSon(k), eps, r, result);
+		}
 	}
 }
 void somme_taux_croissance_croise(IntTree* tree, int eps, int r, double& result){
-	assert(tree->nbSons() >= eps);
 	if (tree->getGeneration() <= r){
+		assert(tree->nbSons() >= eps);
 		result += (*tree->getSon(eps)).taux_croissance*(*tree).taux_croissance;
-		somme_taux_croissance_croise(tree->getSon(0), eps, r, result);
-		somme_taux_croissance_croise(tree->getSon(1), eps, r, result);
+		for (int k = 0; k < tree->nbSons(); k++){
+			somme_taux_croissance_croise(tree->getSon(k), eps, r, result);
+		}
 	}
 }
 double estimateur_alpha_eps_r(IntTree* tree, int eps, int r){

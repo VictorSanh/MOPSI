@@ -130,10 +130,12 @@ void construitArbre(IntTree* tree, int generationMax){
        }
     else{
 		if (tree->isAlive()){
-			double bruit0 = gaussienne(0, 1);
+			double bruit0 = 0;
+			//double bruit0 = gaussienne(0, 1);
 			tree->addAsLastSon(new IntTree(0, (*tree).age_new + 1, alpha0*(*tree).taux_croissance + beta0+bruit0, (*tree).generation + 1,bruit0));
 			construitArbre((*tree).sons[0], generationMax);
-			double bruit1 = gaussienne(0, 1);
+			double bruit1 = 0;
+			//double bruit1 = gaussienne(0, 1);
 			tree->addAsLastSon(new IntTree(0, (*tree).age_old + 1, alpha1*(*tree).taux_croissance + beta1+bruit1, (*tree).generation + 1,bruit1));
 			construitArbre((*tree).sons[1], generationMax);
 		}

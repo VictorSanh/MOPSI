@@ -6,10 +6,10 @@
 using namespace std;
 
 //Constantes pour les taux de croissance
-const double alpha0 = 0.8;
-const double alpha1 = 0.7;
-const double beta0 = 0.6;
-const double beta1 = 0.5;
+const double alpha0 = 0.1;
+const double alpha1 = 0.1;
+const double beta0 = 0.1;
+const double beta1 = 0.1;
 
 const double p10 = 0.8; // proba de se diviser en deux fils qui ne meurent pas
 const double p1 = 0.05;//proba de se diviser en deux fils dont le nouveau meurt
@@ -25,4 +25,4 @@ void somme_taux_croissance_croise(IntTree* tree, int eps, int r, double& result)
 
 //Estimateurs
 double estimateur_alpha_eps_r(IntTree* tree, int eps, int r);
-double estimtaeur_beta_eps_r(IntTree* tree, int eps, int r);
+double estimateur_beta_eps_r(IntTree* tree, int eps, int r);
