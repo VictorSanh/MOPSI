@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int prof_de_test = 15;
+int prof_de_test = 20;
 int main()
 {
 	InitRandom();

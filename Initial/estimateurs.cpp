@@ -72,7 +72,7 @@ double estimateur_alpha_eps_r(IntTree* tree, int eps, int r){
 	somme_taux_croissance_next(tree, eps, r, somme_next);
 	somme_taux_croissance_carree(tree, r, somme_carree);
 
-	double gros = (somme_carree / card - (somme*somme_next) / (card*card)) / (somme_carree / card - (somme / card)*(somme / card));
+	double gros = (somme_croisee / card - (somme*somme_next) / (card*card)) / (somme_carree / card - (somme / card)*(somme / card));
 	return gros;
 }
 
