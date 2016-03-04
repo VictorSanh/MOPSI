@@ -27,6 +27,8 @@ public:
         int age_new; //age du nouveau pole
         int age_old; //age du vieux pole
 		bool alive; //si true, alors la cellule n'est pas morte et peut donner naissance
+		bool new_son_will_live;
+		bool old_son_will_live;
 		double taux_croissance;
 		double bruit;
 
@@ -42,11 +44,18 @@ public:
         // Set information of this node
         void setData(int age_new0,int age_old0);
 
+
 		//Return aliveness of cellule
 		bool isAlive();
+		void setAlive(bool deadoralive);
+		
 
 		//Return the generation of cellule
 		int getGeneration();
+
+		// return aliveness of sons
+		bool new_son_alive();
+		bool old_son_alive();
 
         // Return the number of sons of this node
         int nbSons();
@@ -72,4 +81,4 @@ public:
 void graphicDisplay(IntTree* tree,int generation, int position); //Affichage graphique de l'arbre jusqu'à génération.
 void construitArbre(IntTree * tree, int generationMax); //Construit un arbre de profondeur "generationMax", la racine étant la génération 0.
 double modelisation_mort_age(int age_old); //Pour la suite, cette fonction ne servira pas.
-int cardinal(IntTree* tree, int generation); //Cardinal de l'arbre jusqu'à génération incluse.
+

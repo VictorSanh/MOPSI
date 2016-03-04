@@ -5,18 +5,33 @@
 #include <cassert>
 
 IntTree :: IntTree(int age_new0, int age_old0, double taux_croissance0, int generation0, double bruit0){
-	age_new = age_new0 ;
+    age_new = age_new0 ;
 	age_old = age_old0 ;
-	double x = modelisation_mort_age(age_old);
-	 if (x <= proba_mort){
-		 alive = false;
-	 }
-	 else{
-		 alive = true;
-	 }
-	 taux_croissance = taux_croissance0;
-	 generation = generation0;
-	 bruit = bruit0;
+	double x = Random(0,1);
+	if (x<=proba_deces){
+		alive = false;
+		new_son_will_live = false;
+		old_son_will_live = false;	
+	}
+	if (x>proba_deces && x<= proba_deces + p10){
+		alive = true;
+		new_son_will_live = true;
+		old_son_will_live = true;	
+	}
+	if(x>proba_deces + p10 && x <= proba_deces +p10+p1){
+		alive = true;		
+		new_son_will_live = false;
+		old_son_will_live = true;	
+	}
+	if(x> proba_deces+p10+p1){
+		alive = true;		
+		new_son_will_live = true;
+		old_son_will_live = false;	
+	}
+
+	taux_croissance = taux_croissance0;
+	generation = generation0;
+	bruit = bruit0;
 }
 
 pair<int,int> IntTree :: getData(){
@@ -36,7 +51,17 @@ void IntTree :: setData(int age_new0,int age_old0){
 bool IntTree::isAlive(){
 	return alive;
 }
+void IntTree :: setAlive(bool deadoralive){
+	alive = deadoralive;
+}
+bool IntTree :: new_son_alive(){
+	return new_son_will_live;
+}
 
+bool IntTree :: old_son_alive(){
+	return old_son_will_live;
+}
+	
 int IntTree::getGeneration(){
 	return generation;
 }
@@ -103,7 +128,7 @@ void IntTree :: newDisplay(int ordre, string prefix , string indent){
 
 void  graphicDisplay(IntTree* tree, int generation, int position){
 
-	if (generation == 8){
+    if (generation == 16){
 	}
 	else{
 		RGB<byte> color(0, 248 - 31 * (*tree).age_old, 248 - 31 * (*tree).age_old);
@@ -132,11 +157,24 @@ void construitArbre(IntTree* tree, int generationMax){
 		if (tree->isAlive()){
 			double bruit0 = 0;
 			//double bruit0 = gaussienne(0, 1);
-			tree->addAsLastSon(new IntTree(0, (*tree).age_new + 1, alpha0*(*tree).taux_croissance + beta0+bruit0, (*tree).generation + 1,bruit0));
+			double new_taux_croissance = alpha0*(*tree).taux_croissance + beta0+bruit0;
+			IntTree* new_son = new IntTree(0, (*tree).age_new + 1, new_taux_croissance , (*tree).generation + 1,bruit0);
+			if (tree->new_son_alive())
+				new_son->setAlive(true);
+			else 
+				new_son-> setAlive(false);
+			tree->addAsLastSon(new_son);
 			construitArbre((*tree).sons[0], generationMax);
+
 			double bruit1 = 0;
 			//double bruit1 = gaussienne(0, 1);
-			tree->addAsLastSon(new IntTree(0, (*tree).age_old + 1, alpha1*(*tree).taux_croissance + beta1+bruit1, (*tree).generation + 1,bruit1));
+			double old_taux_croissance = alpha1*(*tree).taux_croissance + beta1+bruit1;
+			IntTree* old_son = new IntTree(0, (*tree).age_old + 1, old_taux_croissance , (*tree).generation + 1,bruit1);
+			if (tree->old_son_alive())
+				old_son -> setAlive(true);
+			else 
+				old_son-> setAlive(false);
+			tree->addAsLastSon(old_son);
 			construitArbre((*tree).sons[1], generationMax);
 		}
    }
