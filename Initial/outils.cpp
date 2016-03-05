@@ -25,7 +25,7 @@ double gaussienne(double mu, double sigma){
 void verifie_gaussienne(){
 	//à mettre dans le main pour vérifier
 	double tab[100];
-	for (int i = 0; i<100; i++){
+	for (int i = 0; i < 100; i++){
 		tab[i] = gaussienne(0, 1);
 	}
 
@@ -37,11 +37,11 @@ void verifie_gaussienne(){
 			histogramme[1] += 1;
 		else if (tab[i]>0 && tab[i] <= 2)
 			histogramme[2] += 1;
-		else if (tab[i]>2){
+		else if (tab[i] > 2){
 			histogramme[3] += 1;
 		}
 	}
-	for (int i = 0; i<4; i++){
+	for (int i = 0; i < 4; i++){
 		drawLine(20 * i, 512, 20 * i, 512 - histogramme[i], BLUE, 10);
 	}
 }

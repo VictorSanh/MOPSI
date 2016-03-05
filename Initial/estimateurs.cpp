@@ -9,7 +9,7 @@
 	x += 0.001*age_old;
 	//cout << x << endl;
 	return x;
-}*/
+	}*/
 
 long int cardinal(IntTree* tree, int generation){
 	// retourner le cardinal de l'arbre jusqu'à la génération "generation"
@@ -17,7 +17,7 @@ long int cardinal(IntTree* tree, int generation){
 	else{
 		int fils = tree->nbSons();
 		long int card = 0;
-		for (int i = 0; i<fils; i++){
+		for (int i = 0; i < fils; i++){
 			card += cardinal(tree->getSon(i), generation);
 		}
 		return 1 + card;
@@ -34,9 +34,9 @@ void somme_taux_croissance(IntTree* tree, int r, long double& result){
 		}
 	}
 }
-void somme_taux_croissance_carree(IntTree* tree, int r,long double& result){
+void somme_taux_croissance_carree(IntTree* tree, int r, long double& result){
 	if (tree->getGeneration() <= r){
-		result += pow((*tree).taux_croissance,2);
+		result += pow((*tree).taux_croissance, 2);
 		for (int k = 0; k < tree->nbSons(); k++){
 			somme_taux_croissance_carree(tree->getSon(k), r, result);
 		}
@@ -45,7 +45,7 @@ void somme_taux_croissance_carree(IntTree* tree, int r,long double& result){
 void somme_taux_croissance_next(IntTree* tree, int eps, int r, long double& result){
 	if (tree->getGeneration() <= r){
 		assert(tree->nbSons() >= eps);
-		result += (*tree->getSon(eps)).taux_croissance; 
+		result += (*tree->getSon(eps)).taux_croissance;
 		for (int k = 0; k < tree->nbSons(); k++){
 			somme_taux_croissance_next(tree->getSon(k), eps, r, result);
 		}
@@ -76,7 +76,7 @@ long double estim_alpha_eps_r(IntTree* tree, int eps, int r){
 	//cout << "somme_next : "<< somme_next << endl;
 	somme_taux_croissance_carree(tree, r, somme_carree);
 	//cout << "somme_carree : " << somme_carree << endl;
-	
+
 
 	long double gros = (somme_croisee / card - (somme*somme_next) / (card*card)) / (somme_carree / card - (somme / card)*(somme / card));
 	return gros;
@@ -145,8 +145,8 @@ long double estim_mu2_r(IntTree* tree, int r){
 
 	long double sigma2 = 0;
 	estim_sigma2_r(tree, r, sigma2);
-	sigma2 = sigma2 / (2 * cardinal(tree,r));
-	
+	sigma2 = sigma2 / (2 * cardinal(tree, r));
+
 	return ((2 * A*B / (1 - E) + C + sigma2) / (1 - D));
 }
 
@@ -191,5 +191,5 @@ long double stat36(IntTree* tree, int r){
 	estim_rho_r(tree, r, rho);
 	rho = rho / (card*sigma2);
 
-	return card*(alpha0 - alpha1)*(mu2 - mu1*mu1) / (2 * sigma2*(1 - rho));
+	return card*pow(alpha0 - alpha1, 2)*(mu2 - mu1*mu1) / (2 * sigma2*(1 - rho));
 }

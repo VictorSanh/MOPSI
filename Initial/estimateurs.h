@@ -7,9 +7,9 @@ using namespace std;
 
 //Constantes pour les taux de croissance
 const double alpha0 = 0.5;
-const double alpha1 = 0.8;
+const double alpha1 = 0.5;
 const double beta0 = 0.5;
-const double beta1 = 0.8;
+const double beta1 = 0.5;
 
 const double p10 = 0.8; // proba de se diviser en deux fils qui ne meurent pas
 const double p1 = 0.05;//proba de se diviser en deux fils dont le nouveau meurt
