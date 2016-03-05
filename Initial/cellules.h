@@ -31,6 +31,7 @@ public:
 		bool old_son_will_live;
 		double taux_croissance;
 		double bruit;
+		double estim_bruit; //cf page 26 de guyon et page 16 de delmas
 
         // Create a node with given information
         IntTree(int age_new0,int age_old0, double taux_croissance0, int generation0, double bruit0);
@@ -81,4 +82,4 @@ public:
 void graphicDisplay(IntTree* tree,int generation, int position); //Affichage graphique de l'arbre jusqu'à génération.
 void construitArbre(IntTree * tree, int generationMax); //Construit un arbre de profondeur "generationMax", la racine étant la génération 0.
 double modelisation_mort_age(int age_old); //Pour la suite, cette fonction ne servira pas.
-
+void estim_bruit(IntTree* tree, long double alpha0, long double beta0, long double alpha1, long double beta1);

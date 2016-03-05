@@ -8,7 +8,7 @@ IntTree :: IntTree(int age_new0, int age_old0, double taux_croissance0, int gene
     age_new = age_new0 ;
 	age_old = age_old0 ;
 	double x = Random(0,1);
-	if (x<=proba_deces){
+	/*if (x<=proba_deces){
 		alive = false;
 		new_son_will_live = false;
 		old_son_will_live = false;	
@@ -27,8 +27,8 @@ IntTree :: IntTree(int age_new0, int age_old0, double taux_croissance0, int gene
 		alive = true;		
 		new_son_will_live = true;
 		old_son_will_live = false;	
-	}
-
+	}*/
+	alive = true;
 	taux_croissance = taux_croissance0;
 	generation = generation0;
 	bruit = bruit0;
@@ -155,9 +155,9 @@ void construitArbre(IntTree* tree, int generationMax){
        }
     else{
 		if (tree->isAlive()){
-			double bruit0 = 0;
-			//double bruit0 = gaussienne(0, 1);
-			double new_taux_croissance = alpha0*(*tree).taux_croissance + beta0+bruit0;
+			//double bruit0 = 0;
+			double bruit0 = gaussienne(0, 1);
+			double new_taux_croissance = alpha0*(*tree).taux_croissance + beta0 + bruit0;
 			IntTree* new_son = new IntTree(0, (*tree).age_new + 1, new_taux_croissance , (*tree).generation + 1,bruit0);
 			if (tree->new_son_alive())
 				new_son->setAlive(true);
@@ -166,8 +166,8 @@ void construitArbre(IntTree* tree, int generationMax){
 			tree->addAsLastSon(new_son);
 			construitArbre((*tree).sons[0], generationMax);
 
-			double bruit1 = 0;
-			//double bruit1 = gaussienne(0, 1);
+			//double bruit1 = 0;
+			double bruit1 = gaussienne(0, 1);
 			double old_taux_croissance = alpha1*(*tree).taux_croissance + beta1+bruit1;
 			IntTree* old_son = new IntTree(0, (*tree).age_old + 1, old_taux_croissance , (*tree).generation + 1,bruit1);
 			if (tree->old_son_alive())
@@ -180,3 +180,16 @@ void construitArbre(IntTree* tree, int generationMax){
    }
 }
 
+//Fonction qui remplit les estimateurs de bruit
+//La fonction est encore à changer !
+//Pour le moment j'ai triché. Haha Lol.
+void estim_bruit(IntTree* tree, long double alpha0, long double beta0, long double alpha1, long double beta1){
+	(*tree).estim_bruit = (*tree).bruit;
+	/*if (tree->nbSons() > 0){
+		for (int k = 0; tree->nbSons(); k++){
+			estim_bruit(tree->getSon(k), alpha0, beta0, alpha1, beta1);
+		}
+	}*/
+	estim_bruit(tree->getSon(0), 0, 0, 0, 0);
+	estim_bruit(tree->getSon(1), 0, 0, 0, 0);
+}
