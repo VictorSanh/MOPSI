@@ -39,4 +39,8 @@ long double estim_mu2_r(IntTree* tree, int r);
 
 //Proposition 35 de Guyon
 long double stat35(IntTree* tree, int r);
+//Proposition 36 de Guyon
 long double stat36(IntTree* tree, int r);
+//Proposition 37 de Guyon
+long double stat37(IntTree* tree, int r);
+
