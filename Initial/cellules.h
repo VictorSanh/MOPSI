@@ -81,5 +81,4 @@ public:
 
 void graphicDisplay(IntTree* tree, int generation, int position); //Affichage graphique de l'arbre jusqu'à génération.
 void construitArbre(IntTree * tree, int generationMax); //Construit un arbre de profondeur "generationMax", la racine étant la génération 0.
-double modelisation_mort_age(int age_old); //Pour la suite, cette fonction ne servira pas.
-void estim_bruit(IntTree* tree, long double alpha0, long double beta0, long double alpha1, long double beta1); //Fonction HYPER IMPORTANTE avant d'apeller estim_sigma2 ou estim_rho
+void estim_bruit(IntTree* tree, int r, long double alpha0, long double beta0, long double alpha1, long double beta1); //Fonction HYPER IMPORTANTE avant d'apeller estim_sigma2 ou estim_rho

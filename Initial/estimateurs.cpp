@@ -1,16 +1,5 @@
 #include "estimateurs.h"
 
-//Fonction qui donne une certaine seuil qui sera comparé à proba_mort, pour simuler aléatoirement la mort des cellules
-//en fonction de leur age.
-//Modélisation qui est pour le moment linéaire, c'est donc à affiner.
-/*double modelisation_mort_age(int age_old){
-	double x = ((double)rand() / (RAND_MAX));
-	//cout << x << endl;
-	x += 0.001*age_old;
-	//cout << x << endl;
-	return x;
-	}*/
-
 long int cardinal(IntTree* tree, int generation){
 	// retourner le cardinal de l'arbre jusqu'à la génération "generation"
 	if ((*tree).generation > generation){ return 0; }
@@ -192,4 +181,99 @@ long double stat36(IntTree* tree, int r){
 	rho = rho / (card*sigma2);
 
 	return card*pow(alpha0 - alpha1, 2)*(mu2 - mu1*mu1) / (2 * sigma2*(1 - rho));
+}
+
+void histo35(int r){
+	const int taille = 2000;
+	long double echantillon[taille];
+
+	for (int k = 0; k < taille; k++){
+		IntTree* tree = new IntTree(0, 0, 1, 0, gaussienne(0, 1));
+		construitArbre(tree, r+1);
+		long double alpha0 = estim_alpha_eps_r(tree, 0, r);
+		long double alpha1 = estim_alpha_eps_r(tree, 1, r);
+		long double bet0 = estim_beta_eps_r(tree, 0, r);
+		long double bet1 = estim_beta_eps_r(tree, 1, r);
+		estim_bruit(tree, r, alpha0, beta0, alpha1, beta1);
+		echantillon[k] = stat35(tree, r);
+		tree->~IntTree();
+	}
+	cout << "The Simulation of the test set is finished. Begin the partition of the histogram" << endl;
+
+	int t[80];
+	double s[80];
+	for (int k = 0; k < 80; k++){ 
+		t[k] = 0; 
+		s[k] = chi2((double)k / 8, 2.0);
+	}
+	for (int i = 0; i <taille; i++) {
+		for (int j = 0; j < 80; j++) {
+			if (echantillon[i] < (float)(j + 1)/8 && echantillon[i] >= (float)j/8){ t[j]++; }
+		}
+	}
+	cout << "Partition is finished." << endl;
+
+	long double maxit = 0;
+	double maxis = 0;
+	for (int i = 0; i < 80; i++){
+		if (maxit < t[i]){
+			maxit = t[i];
+		}
+		if (maxis < s[i]){
+			maxis = s[i];
+		}
+	}
+	
+	for (int i = 0; i < 80; i++) {
+		fillRect(10+i*14, (650 - t[i]/maxit*500), 7, t[i]/maxit*500, BLUE);
+		fillRect(17 + i * 14, (650 - s[i] / maxis*500), 7, s[i] / maxis*500, RED);
+	}
+}
+
+void histo36(int r){
+	const int taille = 2000;
+	long double echantillon[taille];
+
+	for (int k = 0; k < taille; k++){
+		IntTree* tree = new IntTree(0, 0, 1, 0, gaussienne(0, 1));
+		construitArbre(tree, r+1);
+		long double alpha0 = estim_alpha_eps_r(tree, 0, r);
+		long double alpha1 = estim_alpha_eps_r(tree, 1, r);
+		long double bet0 = estim_beta_eps_r(tree, 0, r);
+		long double bet1 = estim_beta_eps_r(tree, 1, r);
+		estim_bruit(tree, r, alpha0, beta0, alpha1, beta1);
+		echantillon[k] = stat36(tree, r);
+		tree->~IntTree();
+	}
+	cout << "The Simulation of the test set is finished. Begin the partition of the histogram" << endl;
+
+	int t[80];
+	double s[80];
+	for (int k = 0; k < 80; k++){
+		t[k] = 0;
+		if (k > 0){ s[k] = chi2((double)k / 8, 1.0); }
+		else { s[k] = 0; }
+	}
+	for (int i = 0; i <taille; i++) {
+		for (int j = 0; j < 80; j++) {
+			if (echantillon[i] < (float)(j + 1) / 8 && echantillon[i] >= (float)j / 8){ t[j]++; }
+		}
+	}
+	
+	cout << "Partition is finished." << endl;
+	double maxit = 0;
+	double maxis = 0;
+	for (int i = 0; i < 80; i++){
+		if (maxit < t[i]){
+			maxit = t[i];
+		}
+		if (isinf(s[i])==false && maxis < s[i]){
+			maxis = s[i];
+		}
+	}
+	
+	for (int i = 0; i < 80; i++) {
+		fillRect(10 + i * 14, (650 - t[i] / maxit * 500), 7, t[i] / maxit * 500, BLUE);
+		fillRect(3 + i * 14, (650 - s[i] / maxis * 500), 7, s[i] / maxis * 500, RED);
+	}
 }

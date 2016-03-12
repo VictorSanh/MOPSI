@@ -182,11 +182,19 @@ void construitArbre(IntTree* tree, int generationMax){
 }
 
 //Fonction qui remplit les estimateurs de bruit
-//La fonction est encore à changer !
-//Pour le moment j'ai triché. Haha Lol.
-void estim_bruit(IntTree* tree, long double alpha0, long double beta0, long double alpha1, long double beta1){
-	(*tree).estim_bruit = (*tree).bruit;
-	for (int k = 0; k < tree->nbSons(); k++){
-		estim_bruit(tree->getSon(k), alpha0, beta0, alpha1, beta1);
+void estim_bruit(IntTree* tree, int r, long double alpha0, long double beta0, long double alpha1, long double beta1){
+	if (tree->getGeneration() == 0){ 
+		(*tree).estim_bruit = (*tree).bruit; 
+		(*tree->getSon(0)).estim_bruit = -alpha0*(*tree).taux_croissance - beta0 + (*tree->getSon(0)).taux_croissance;
+		estim_bruit(tree->getSon(0), r, alpha0, beta0, alpha1, beta1);
+		(*tree->getSon(1)).estim_bruit = -alpha1*(*tree).taux_croissance - beta1 + (*tree->getSon(1)).taux_croissance;
+		estim_bruit(tree->getSon(1), r, alpha0, beta0, alpha1, beta1);
 	}
+	else if (tree->getGeneration() <= r){
+		(*tree->getSon(0)).estim_bruit = -alpha0*(*tree).taux_croissance - beta0 + (*tree->getSon(0)).taux_croissance;
+		estim_bruit(tree->getSon(0), r, alpha0, beta0, alpha1, beta1);
+		(*tree->getSon(1)).estim_bruit = -alpha1*(*tree).taux_croissance - beta1 + (*tree->getSon(1)).taux_croissance;
+		estim_bruit(tree->getSon(1), r, alpha0, beta0, alpha1, beta1);
+	}
+	else{ (*tree).estim_bruit = (*tree).bruit; }
 }

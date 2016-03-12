@@ -42,5 +42,8 @@ long double stat35(IntTree* tree, int r);
 //Proposition 36 de Guyon
 long double stat36(IntTree* tree, int r);
 //Proposition 37 de Guyon
-long double stat37(IntTree* tree, int r);
+//long double stat37(IntTree* tree, int r); // trop chiante, on ne la fera pas.
+
+void histo35(int r);
+void histo36(int r);
 

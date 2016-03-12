@@ -45,3 +45,7 @@ void verifie_gaussienne(){
 		drawLine(20 * i, 512, 20 * i, 512 - histogramme[i], BLUE, 10);
 	}
 }
+
+double chi2(double x, float n){
+	return 1 / (tgamma(n / 2)*pow(2, n / 2))*pow(x, n / 2 - 1)*exp(-x / 2);
+}
