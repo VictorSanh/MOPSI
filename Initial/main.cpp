@@ -1,6 +1,7 @@
 #include <iostream>
 #include "cellules.h"
 #include "estimateurs.h"
+#include "outils.h"
 
 using namespace std;
 
@@ -11,9 +12,9 @@ int main()
 	//Initialisation sans bruit, voire constructeur pour enlever les bruits suivants.
 	//IntTree* root = new IntTree(0, 0, 1, 0,0) ;
 	//Initialisation avec bruit.
-	/*IntTree* root = new IntTree(0, 0, 1, 0, gaussienne(0, 1)); //On initialise à age_new = 0, age_old = 0 et taux_croissance = 1 et generation = 0.
+	IntTree* root = new IntTree(0, 0, 1, 0, gaussienne(0, 1)); //On initialise à age_new = 0, age_old = 0 et taux_croissance = 1 et generation = 0.
 	construitArbre(root, prof_de_test + 1);
-	long double alpha0 = estim_alpha_eps_r(root, 0, prof_de_test);
+	/*long double alpha0 = estim_alpha_eps_r(root, 0, prof_de_test);
 	long double alpha1 = estim_alpha_eps_r(root, 1, prof_de_test);
 	long double bet0 = estim_beta_eps_r(root, 0, prof_de_test);
 	long double bet1 = estim_beta_eps_r(root, 1, prof_de_test);
@@ -22,6 +23,13 @@ int main()
 	cout <<"Racine" <<(*root).estim_bruit << (*root).bruit << endl;
 	cout << (*root->getSon(0)).estim_bruit << endl;
 	cout << "Statistique de test 35 : " << stat36(root, prof_de_test)  << endl;*/
+	
+	stack <double> pile_taux;
+    queue <IntTree*> file_arbres;
+    file_arbres.push(root);
+    liste_taux_simules(pile_taux, file_arbres);
+    //cout << pile_taux.top() <<endl;  //cette ligne crashe..
+    //afficher(pile_taux);
 
 	openWindow(1200, 650);
 	histo35(10);

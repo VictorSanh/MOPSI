@@ -66,6 +66,10 @@ int IntTree::getGeneration(){
 	return generation;
 }
 
+double IntTree::getTauxCroissance() {
+	return taux_croissance;
+}
+
 int IntTree::nbSons(){
 	return sons.size();
 }
@@ -112,26 +116,26 @@ void IntTree::display(){
 	}
 }
 
-void IntTree::newDisplay(int ordre, string prefix, string indent){
+void IntTree :: newDisplay(int ordre, string prefix , string indent){
 
-	stringstream indent_number;
-	for (int i = 0; i < ordre; i++){
-		indent_number << indent;
-	}
-	cout << prefix << indent_number.str() << age_new << age_old << endl;
+   stringstream indent_number;
+   for (int i = 0; i<ordre; i++){
+       indent_number << indent;}
 
-	if (nbSons() != 0){
-		for (int i = 0; i < nbSons(); i++)
-			sons[i]->newDisplay(ordre + 1, prefix, indent);
-	}
+   cout << prefix << indent_number.str() << age_new<<age_old <<endl;
 
+    if (nbSons()!=0){
+        for (int i = 0; i<nbSons();i++)
+            sons[i] -> newDisplay(ordre+1, prefix, indent);
+    }
+	
 }
 
-void  graphicDisplay(IntTree* tree, int generation, int position){
+void  graphicDisplay(IntTree* tree, int generation, int position, int profondeur) {
 
-	if (generation == 16){
+	if (generation == profondeur) {
 	}
-	else{
+	else {
 		RGB<byte> color(0, 248 - 31 * (*tree).age_old, 248 - 31 * (*tree).age_old);
 		fillCircle(position, espace*generation + 10, 10 * (*tree).taux_croissance, color);
 		stringstream ss;
@@ -139,12 +143,15 @@ void  graphicDisplay(IntTree* tree, int generation, int position){
 		ss << "  ";
 		ss << (*tree).age_old;
 		drawString(position, espace*generation + 25, ss.str(), BLACK, 7);
-		drawLine(position, espace*generation + 10, position + H / pow(2, generation + 2), espace*(generation + 1), BLACK, 2);
-		drawLine(position, espace*generation + 10, position - H / pow(2, generation + 2), espace*(generation + 1), BLACK, 2);
-		if ((*tree).sons.size() != 0){
-			graphicDisplay((*tree).sons[0], generation + 1, position - H / pow(2, generation + 2));
-			if ((*tree).sons.size() > 1){
-				graphicDisplay((*tree).sons[1], generation + 1, position + H / pow(2, generation + 2));
+		if (generation <profondeur - 1) {
+			drawLine(position, espace*generation + 10, position + H / pow(2, generation + 2), espace*(generation + 1), BLACK, 2);
+			drawLine(position, espace*generation + 10, position - H / pow(2, generation + 2), espace*(generation + 1), BLACK, 2);
+		}
+		if ((*tree).sons.size() != 0) {
+			graphicDisplay((*tree).sons[0], generation + 1, position - H / pow(2, generation + 2), profondeur);
+			if ((*tree).sons.size() > 1) {
+				graphicDisplay((*tree).sons[1], generation + 1, position + H / pow(2, generation + 2), profondeur
+					);
 			}
 		}
 	}
@@ -197,4 +204,30 @@ void estim_bruit(IntTree* tree, int r, long double alpha0, long double beta0, lo
 		estim_bruit(tree->getSon(1), r, alpha0, beta0, alpha1, beta1);
 	}
 	else{ (*tree).estim_bruit = (*tree).bruit; }
+}
+
+void liste_taux_simules(stack <double> pile_taux, queue <IntTree*> file_arbres) {
+	if (file_arbres.empty()) {
+		cout << "c'est fini !" << endl;
+	}
+	else {
+		int size = file_arbres.size();
+		//en parcourant chaque élément de la file :
+		for (int i = 0; i< size; i++) {
+			IntTree* current_tree = file_arbres.front();
+			//on ajoute le taux de l'arbre courant à la pile
+			double newTaux = current_tree->getTauxCroissance();
+			pile_taux.push(newTaux);
+			cout << pile_taux.top() << endl;
+			//on ajoute les fils de l'arbre courant
+			for (int j = 0; j<(*current_tree).sons.size(); j++) {
+				file_arbres.push((*current_tree).sons[j]);
+			}
+			//on enlève l'arbre courant de la file
+			file_arbres.pop();
+			i++;
+		}
+		liste_taux_simules(pile_taux, file_arbres);
+	}
+
 }

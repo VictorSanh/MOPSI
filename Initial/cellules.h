@@ -57,6 +57,9 @@ public:
 	// return aliveness of sons
 	bool new_son_alive();
 	bool old_son_alive();
+	
+	//return taux de croissance
+	double getTauxCroissance();
 
 	// Return the number of sons of this node
 	int nbSons();
@@ -79,6 +82,7 @@ public:
 	void newDisplay(int ordre, string prefix = "", string indent = "    ");
 };
 
-void graphicDisplay(IntTree* tree, int generation, int position); //Affichage graphique de l'arbre jusqu'à génération.
+void liste_taux_simules(stack <double> pile, queue<IntTree*> file);
+void graphicDisplay(IntTree* tree, int generation, int position, int profondeur); //Affichage graphique de l'arbre jusqu'à génération.
 void construitArbre(IntTree * tree, int generationMax); //Construit un arbre de profondeur "generationMax", la racine étant la génération 0.
 void estim_bruit(IntTree* tree, int r, long double alpha0, long double beta0, long double alpha1, long double beta1); //Fonction HYPER IMPORTANTE avant d'apeller estim_sigma2 ou estim_rho
