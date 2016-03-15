@@ -18,8 +18,13 @@ int main()
     queue <IntTree*> file_arbres;
     file_arbres.push(root);
     liste_taux_simules(pile_taux,file_arbres);
+<<<<<<< HEAD
     cout << pile_taux.size() <<endl;
     afficher(pile_taux);
+=======
+    cout << pile_taux.top()<<endl;
+    //afficher(pile_taux);
+>>>>>>> a4a1c029f88b497aa3c01b1c4ae7e28d4ea9c525
 
 
 
