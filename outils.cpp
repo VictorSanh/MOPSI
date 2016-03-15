@@ -66,6 +66,7 @@ double squared_error(const stack <double>& pile_taux){
 	
 	stack<double> t = pile_taux;
 	
+	
 }
 
 void afficher(const stack<double>& pile){

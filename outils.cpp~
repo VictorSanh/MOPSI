@@ -38,7 +38,7 @@ int taux_experience[512] = {0.0274,0.0274,0.0307,0.0312,0.0338,0.0337,0.0332,0.0
 // faire une liste des taux de croissance simules par parcours de l'arbre en largeur
 
 
-void liste_taux_simules(stack <double> pile_taux, queue <IntTree*> file_arbres){
+void liste_taux_simules(stack <double>& pile_taux, queue <IntTree*> file_arbres){
 	if(file_arbres.empty()){
 		cout << "c'est fini !" <<endl;
 	}	
