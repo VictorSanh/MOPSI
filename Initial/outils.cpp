@@ -15,7 +15,6 @@ void afficher(const stack<double>& pile) {
 			cout << " , ";
 		}
 	}
-
 }
 
 double Random(double a, double b) {
@@ -61,3 +60,28 @@ void verifie_gaussienne() {
 double chi2(double x, float n) {
 	return 1 / (tgamma(n / 2)*pow(2, n / 2))*pow(x, n / 2 - 1)*exp(-x / 2);
 }
+
+double comparaison_erreur(double tab2[512]){
+	double erreur = 0;
+	for (int k = 0; k < 511; k++){
+		erreur += (tab2[k] - tab[k])*(tab2[k] - tab[k]);
+	}
+	return erreur;
+}
+
+void ecrire(string filename, double data[100]){
+	ofstream fichier(filename.c_str(), ios::out | ios::trunc); //Si on aime pas ios::truc, on peut le remplacer la la liste suivante.
+	//ios::trunc : le fichier "filename" est effacé à l'ouverture pour en laisser un vide.
+	//ios:app : ajoute les données à la fin de celles déjà dans le fichier.
+
+	if (fichier){
+		for (int i = 0; i < 100; i++){
+			fichier << data[i] << " " << endl;
+		}
+		fichier.close();
+	}
+	else{
+		cout << "Erreur a l'ouverture du fichier " << filename << endl;
+	}
+}
+

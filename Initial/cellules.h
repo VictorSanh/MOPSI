@@ -9,6 +9,19 @@
 #include <cmath>
 #include <ctime> 
 #include "outils.h"
+//#include "estimateurs.h"
+
+//Constantes pour les taux de croissance
+const double alpha0 = 0.689382;
+const double alpha1 = 0.373397;
+const double beta0 = 0.0112346;
+const double beta1 = 0.012144;
+
+const double p10 = 0.8; // proba de se diviser en deux fils qui ne meurent pas
+const double p1 = 0.05;//proba de se diviser en deux fils dont le nouveau meurt
+const double p0 = 0.1; // proba de se diviser en deux fils dont le vieux meurt
+
+const double proba_deces = 1 - (p10 + p1 + p0);
 
 using namespace std;
 using namespace Imagine;
@@ -82,7 +95,9 @@ public:
 	void newDisplay(int ordre, string prefix = "", string indent = "    ");
 };
 
-void liste_taux_simules(stack <double> pile, queue<IntTree*> file);
+IntTree* load_experimental();
+void load_tab(IntTree* arbre, double tab1[512]);
+void liste_taux_simules(stack <double>& pile, queue<IntTree*> file);
 void graphicDisplay(IntTree* tree, int generation, int position, int profondeur); //Affichage graphique de l'arbre jusqu'à génération.
-void construitArbre(IntTree * tree, int generationMax); //Construit un arbre de profondeur "generationMax", la racine étant la génération 0.
-void estim_bruit(IntTree* tree, int r, long double alpha0, long double beta0, long double alpha1, long double beta1); //Fonction HYPER IMPORTANTE avant d'apeller estim_sigma2 ou estim_rho
+void construitArbre(IntTree * tree, int generationMax);//Construit un arbre de profondeur "generationMax", la racine étant la génération 0.
+void estim_bruit(IntTree* tree, int r, long double estim_alpha0, long double estim_beta0, long double estim_alpha1, long double estim_beta1); //Fonction HYPER IMPORTANTE avant d'apeller estim_sigma2 ou estim_rho

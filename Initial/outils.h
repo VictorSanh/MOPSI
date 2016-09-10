@@ -11,6 +11,9 @@
 #include <random>
 #include <queue>
 #include <stack>
+#include <fstream>
+
+//#include "estimateurs.h"
 #include "cellules.h"
 
 using namespace std;
@@ -22,7 +25,12 @@ double gaussienne(double mu, double sigma); //Génération d'une gaussienne de par
 void verifie_gaussienne(); //Fonction de vérification d'une gaussienne
 void afficher(const stack<double>& pile);
 double chi2(double x, float n); //renvoie l'évaluation en x de la densité du loi du chi2 à n degrés libertés.
-								
+
+double comparaison_erreur(double tab2[512]);
+
+//Fonction d'écriture dans un fichier extérieur. 
+void ecrire(string filename, double data[100]);
+
 // liste des taux de croissance experimentaux
 const double tab[512] = { 0.0274,0.0274,0.0307,0.0312,0.0338,0.0337,0.0332,0.0333,0.0359,0.0355,0.0353,0.0343,0.0353,0.0348,0.0351,0.0343,0.0368,0.0361,0.0366,0.0354,0.0369,
 0.0356,0.0359,0.0353,0.0369,0.0361,0.0368,0.0354,0.0361,0.0357,0.036,0.0348,0.0377,0.0368,0.0374,0.0362,0.0367,0.0365,0.0367,0.0357,0.0374,0.0364,

@@ -1,6 +1,6 @@
 #include "estimateurs.h"
 
-long int cardinal(IntTree* tree, int generation){
+int cardinal(IntTree* tree, int generation){
 	// retourner le cardinal de l'arbre jusqu'à la génération "generation"
 	if ((*tree).generation > generation){ return 0; }
 	else{
@@ -121,16 +121,16 @@ long double estim_mu1_r(IntTree* tree, int r){
 }
 
 long double estim_mu2_r(IntTree* tree, int r){
-	long double alpha0 = estim_alpha_eps_r(tree, 0, r);
-	long double alpha1 = estim_alpha_eps_r(tree, 1, r);
-	long double beta0 = estim_beta_eps_r(tree, 0, r);
-	long double beta1 = estim_beta_eps_r(tree, 1, r);
+	long double estim_alpha0 = estim_alpha_eps_r(tree, 0, r);
+	long double estim_alpha1 = estim_alpha_eps_r(tree, 1, r);
+	long double estim_beta0 = estim_beta_eps_r(tree, 0, r);
+	long double estim_beta1 = estim_beta_eps_r(tree, 1, r);
 
-	long double A = (alpha0*beta0 + alpha1*beta1) / 2;
-	long double B = (beta0 + beta1) / 2;
-	long double C = (beta0*beta0 + beta1*beta1) / 2;
-	long double D = (alpha0*alpha0 + alpha1*alpha1) / 2;
-	long double E = (alpha0 + alpha1) / 2;
+	long double A = (estim_alpha0*estim_beta0 + estim_alpha1*estim_beta1) / 2;
+	long double B = (estim_beta0 + estim_beta1) / 2;
+	long double C = (estim_beta0*estim_beta0 + estim_beta1*estim_beta1) / 2;
+	long double D = (estim_alpha0*estim_alpha0 + estim_alpha1*estim_alpha1) / 2;
+	long double E = (estim_alpha0 + estim_alpha1) / 2;
 
 	long double sigma2 = 0;
 	estim_sigma2_r(tree, r, sigma2);
@@ -151,23 +151,23 @@ long double stat35(IntTree* tree, int r){
 	estim_rho_r(tree, r, rho);
 	rho = rho / (card*sigma2);
 
-	long double alpha0 = estim_alpha_eps_r(tree, 0, r);
-	long double alpha1 = estim_alpha_eps_r(tree, 1, r);
-	long double beta0 = estim_beta_eps_r(tree, 0, r);
-	long double beta1 = estim_beta_eps_r(tree, 1, r);
+	long double estim_alpha0 = estim_alpha_eps_r(tree, 0, r);
+	long double estim_alpha1 = estim_alpha_eps_r(tree, 1, r);
+	long double estim_beta0 = estim_beta_eps_r(tree, 0, r);
+	long double estim_beta1 = estim_beta_eps_r(tree, 1, r);
 
 	long double mu1 = estim_mu1_r(tree, r);
 	long double mu2 = estim_mu2_r(tree, r);
 
-	long double gros = pow(alpha0 - alpha1, 2)*(mu2 - mu1*mu1) + pow((alpha0 - alpha1)*mu1 + beta0 - beta1, 2);
+	long double gros = pow(estim_alpha0 - estim_alpha1, 2)*(mu2 - mu1*mu1) + pow((estim_alpha0 - estim_alpha1)*mu1 + estim_beta0 - estim_beta1, 2);
 	return (card / (2 * sigma2*(1 - rho)))*gros;
 }
 
 long double stat36(IntTree* tree, int r){
 	int card = cardinal(tree, r);
 
-	long double alpha0 = estim_alpha_eps_r(tree, 0, r);
-	long double alpha1 = estim_alpha_eps_r(tree, 1, r);
+	long double estim_alpha0 = estim_alpha_eps_r(tree, 0, r);
+	long double estim_alpha1 = estim_alpha_eps_r(tree, 1, r);
 
 	long double mu1 = estim_mu1_r(tree, r);
 	long double mu2 = estim_mu2_r(tree, r);
@@ -180,7 +180,7 @@ long double stat36(IntTree* tree, int r){
 	estim_rho_r(tree, r, rho);
 	rho = rho / (card*sigma2);
 
-	return card*pow(alpha0 - alpha1, 2)*(mu2 - mu1*mu1) / (2 * sigma2*(1 - rho));
+	return card*pow(estim_alpha0 - estim_alpha1, 2)*(mu2 - mu1*mu1) / (2 * sigma2*(1 - rho));
 }
 
 void histo35(int r){
@@ -190,11 +190,11 @@ void histo35(int r){
 	for (int k = 0; k < taille; k++){
 		IntTree* tree = new IntTree(0, 0, 1, 0, gaussienne(0, 1));
 		construitArbre(tree, r+1);
-		long double alpha0 = estim_alpha_eps_r(tree, 0, r);
-		long double alpha1 = estim_alpha_eps_r(tree, 1, r);
-		long double bet0 = estim_beta_eps_r(tree, 0, r);
-		long double bet1 = estim_beta_eps_r(tree, 1, r);
-		estim_bruit(tree, r, alpha0, beta0, alpha1, beta1);
+		long double estim_alpha0 = estim_alpha_eps_r(tree, 0, r);
+		long double estim_alpha1 = estim_alpha_eps_r(tree, 1, r);
+		long double estim_beta0 = estim_beta_eps_r(tree, 0, r);
+		long double estim_beta1 = estim_beta_eps_r(tree, 1, r);
+		estim_bruit(tree, r, estim_alpha0, estim_beta0, estim_alpha1, estim_beta1);
 		echantillon[k] = stat35(tree, r);
 		tree->~IntTree();
 	}
@@ -237,11 +237,11 @@ void histo36(int r){
 	for (int k = 0; k < taille; k++){
 		IntTree* tree = new IntTree(0, 0, 1, 0, gaussienne(0, 1));
 		construitArbre(tree, r+1);
-		long double alpha0 = estim_alpha_eps_r(tree, 0, r);
-		long double alpha1 = estim_alpha_eps_r(tree, 1, r);
-		long double bet0 = estim_beta_eps_r(tree, 0, r);
-		long double bet1 = estim_beta_eps_r(tree, 1, r);
-		estim_bruit(tree, r, alpha0, beta0, alpha1, beta1);
+		long double estim_alpha0 = estim_alpha_eps_r(tree, 0, r);
+		long double estim_alpha1 = estim_alpha_eps_r(tree, 1, r);
+		long double estim_beta0 = estim_beta_eps_r(tree, 0, r);
+		long double estim_beta1 = estim_beta_eps_r(tree, 1, r);
+		estim_bruit(tree, r, estim_alpha0, estim_beta0, estim_alpha1, estim_beta1);
 		echantillon[k] = stat36(tree, r);
 		tree->~IntTree();
 	}

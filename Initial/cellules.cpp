@@ -1,5 +1,5 @@
 #include "cellules.h"
-#include "estimateurs.h"
+
 #include <iostream>
 #include <sstream>
 #include <cassert>
@@ -206,7 +206,7 @@ void estim_bruit(IntTree* tree, int r, long double alpha0, long double beta0, lo
 	else{ (*tree).estim_bruit = (*tree).bruit; }
 }
 
-void liste_taux_simules(stack <double> pile_taux, queue <IntTree*> file_arbres) {
+void liste_taux_simules(stack <double>& pile_taux, queue <IntTree*> file_arbres) {
 	if (file_arbres.empty()) {
 		cout << "c'est fini !" << endl;
 	}
@@ -230,4 +230,40 @@ void liste_taux_simules(stack <double> pile_taux, queue <IntTree*> file_arbres) 
 		liste_taux_simules(pile_taux, file_arbres);
 	}
 
+}
+
+IntTree* load_experimental(){
+	IntTree* arbre_exp = new IntTree(0, 0, 1, 0, 0);
+	construitArbre(arbre_exp, 8);
+	std::queue<IntTree*> fifo;
+	int i = 0;
+	fifo.push(arbre_exp);
+	while (fifo.empty() == false && i<512){
+		IntTree* node = fifo.front();
+		(*node).taux_croissance = tab[i];
+		fifo.pop();
+		i++;
+		if (node->getGeneration() < 8){
+			fifo.push(node->getSon(0));
+			fifo.push(node->getSon(1));
+		}
+	}
+	cout << "Arbre experimental charge ! Have fun now !" << endl;
+	return arbre_exp;
+}
+
+void load_tab(IntTree* arbre, double tab1[512]){
+	std::queue<IntTree*> fifo;
+	int i = 0;
+	fifo.push(arbre);
+	while (fifo.empty() == false && i<512){
+		IntTree* node = fifo.front();
+		tab1[i] = (*node).taux_croissance;
+		fifo.pop();
+		i++;
+		if (node->getGeneration() < 8){
+			fifo.push(node->getSon(0));
+			fifo.push(node->getSon(1));
+		}
+	}
 }
